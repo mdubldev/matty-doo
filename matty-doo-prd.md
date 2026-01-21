@@ -367,17 +367,17 @@ export default defineSchema({
 - [x] Drag-and-drop reordering
 
 ### Phase 4: To-Dos (Day 3-4)
-- [ ] Convex schema + functions for to-dos
-- [ ] To-do list UI
-- [ ] Quick-add input
-- [ ] Status toggle + auto-sort
-- [ ] Delete (when complete)
-- [ ] Drag-and-drop reordering
+- [x] Convex schema + functions for to-dos
+- [x] To-do list UI
+- [x] Quick-add input
+- [x] Status toggle + auto-sort
+- [x] Delete (when complete)
+- [x] Drag-and-drop reordering
 
 ### Phase 5: To-Do Details (Day 4-5)
-- [ ] Detail modal
-- [ ] Tiptap integration
-- [ ] Save/auto-save notes
+- [x] Detail modal
+- [x] Tiptap integration
+- [x] Save/auto-save notes
 
 ### Phase 6: Polish (Day 5-6)
 - [ ] Responsive refinements

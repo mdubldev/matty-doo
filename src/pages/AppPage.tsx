@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useConvexAuth } from 'convex/react';
 import { Navigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
+import { TodoList } from '@/components/todos';
 import type { Id } from '@/lib/convex';
 
 export function AppPage() {
@@ -27,19 +28,15 @@ export function AppPage() {
       selectedSpaceId={selectedSpaceId}
       onSelectSpace={setSelectedSpaceId}
     >
-      <div className="h-full flex items-center justify-center">
-        <div className="text-center">
-          {selectedSpaceId ? (
-            <p className="text-muted-foreground">
-              Todos will be shown here (Phase 4)
-            </p>
-          ) : (
-            <p className="text-muted-foreground">
-              Select or create a space to get started
-            </p>
-          )}
+      {selectedSpaceId ? (
+        <TodoList spaceId={selectedSpaceId} />
+      ) : (
+        <div className="h-full flex items-center justify-center">
+          <p className="text-muted-foreground">
+            Select or create a space to get started
+          </p>
         </div>
-      </div>
+      )}
     </AppLayout>
   );
 }
