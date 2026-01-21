@@ -17,18 +17,22 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTodos } from '@/hooks/useTodos';
+import { useFolders } from '@/hooks/useFolders';
 import { TodoQuickAdd } from './TodoQuickAdd';
 import { TodoItem } from './TodoItem';
 import { TodoDetailModal } from './TodoDetailModal';
 import { TodoListSkeleton } from './TodoSkeleton';
-import type { Id, Todo, Space } from '@/lib/convex';
+import { FolderTabs } from '@/components/folders/FolderTabs';
+import type { Id, Todo, Space, FolderFilter } from '@/lib/convex';
 
 interface TodoListProps {
   spaceId: Id<'spaces'>;
   space: Space;
+  selectedFolderId: FolderFilter;
+  onSelectFolder: (folderId: FolderFilter) => void;
 }
 
-export function TodoList({ spaceId, space }: TodoListProps) {
+export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: TodoListProps) {
   const {
     todos,
     isLoading,
@@ -37,7 +41,9 @@ export function TodoList({ spaceId, space }: TodoListProps) {
     deleteTodo,
     reorderTodos,
     toggleTodoStatus,
-  } = useTodos(spaceId);
+  } = useTodos(spaceId, selectedFolderId);
+
+  const { folders } = useFolders(spaceId);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -141,8 +147,22 @@ export function TodoList({ spaceId, space }: TodoListProps) {
         <h1 className="text-lg font-semibold truncate">{space.name}</h1>
       </div>
 
+      {/* Folder tabs */}
+      <div className="px-4 pt-3">
+        <FolderTabs
+          spaceId={spaceId}
+          selectedFolderId={selectedFolderId}
+          onSelectFolder={onSelectFolder}
+        />
+      </div>
+
       {/* Quick add input */}
-      <TodoQuickAdd spaceId={spaceId} onCreateTodo={createTodo} />
+      <TodoQuickAdd
+        spaceId={spaceId}
+        onCreateTodo={createTodo}
+        selectedFolderId={selectedFolderId}
+        folders={folders}
+      />
 
       {/* Todo list */}
       <div className="flex-1 overflow-auto">

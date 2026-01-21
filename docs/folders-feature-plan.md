@@ -134,9 +134,9 @@ todos: defineTable({
 - [x] Create `FolderCreateInline.tsx` - inline creation
 
 ### Phase 4: Integration
-- [ ] Update `AppPage.tsx` - add selectedFolderId state
-- [ ] Update `TodoList.tsx` - insert FolderTabs, filter todos
-- [ ] Update `TodoQuickAdd.tsx` - pass folderId to create
+- [x] Update `AppPage.tsx` - add selectedFolderId state
+- [x] Update `TodoList.tsx` - insert FolderTabs, filter todos
+- [x] Update `TodoQuickAdd.tsx` - pass folderId to create (+ folder selector dropdown in "All" view)
 
 ### Phase 5: Cross-Folder Drag-Drop
 - [ ] Make FolderTab a droppable target
