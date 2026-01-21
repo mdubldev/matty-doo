@@ -1,4 +1,5 @@
-import { useDroppable } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/lib/utils';
 import { FolderTab } from './FolderTab';
 import type { Folder } from '@/lib/convex';
@@ -18,17 +19,34 @@ export function DroppableFolderTab({
   onUpdate,
   onDelete,
 }: DroppableFolderTabProps) {
-  const { setNodeRef, isOver } = useDroppable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isOver,
+  } = useSortable({
     id: `folder-${folder._id}`,
   });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   return (
     <div
       ref={setNodeRef}
+      style={style}
       className={cn(
         'rounded-md transition-colors',
-        isOver && 'bg-accent/70 ring-2 ring-primary/30'
+        isOver && 'bg-accent/70 ring-2 ring-primary/30',
+        isDragging && 'opacity-50'
       )}
+      {...attributes}
+      {...listeners}
     >
       <FolderTab
         folder={folder}

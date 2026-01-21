@@ -63,7 +63,7 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
     moveTodoToFolder,
   } = useTodos(spaceId, selectedFolderId);
 
-  const { folders } = useFolders(spaceId);
+  const { folders, reorderFolders } = useFolders(spaceId);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,9 +87,29 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
     const { active, over } = event;
     if (!over) return;
 
+    const activeId = String(active.id);
     const overId = String(over.id);
 
-    // Cross-folder drop (works for any todo, any view)
+    // Folder tab reordering (both active and over are folders)
+    if (activeId.startsWith('folder-') && overId.startsWith('folder-')) {
+      // Skip if dragging to "All" tab (folder-root) or same position
+      if (overId === 'folder-root' || activeId === overId) return;
+
+      const activeFolderId = activeId.replace('folder-', '') as Id<'folders'>;
+      const overFolderId = overId.replace('folder-', '') as Id<'folders'>;
+
+      if (folders) {
+        const oldIndex = folders.findIndex((f) => f._id === activeFolderId);
+        const newIndex = folders.findIndex((f) => f._id === overFolderId);
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newOrder = arrayMove(folders, oldIndex, newIndex);
+          reorderFolders({ folderIds: newOrder.map((f) => f._id) });
+        }
+      }
+      return;
+    }
+
+    // Cross-folder drop: todo onto folder tab (works for any todo, any view)
     if (overId.startsWith('folder-')) {
       const todoId = active.id as Id<'todos'>;
       if (overId === 'folder-root') {

@@ -144,9 +144,9 @@ todos: defineTable({
 - [x] Call moveTodoToFolder on cross-folder drop
 
 ### Phase 6: Folder Management
-- [ ] Create `DeleteFolderDialog.tsx` - confirm with move-to-root option
-- [ ] Add edit/delete actions to FolderTab
-- [ ] Add folder tab reordering (drag tabs)
+- [x] Create `DeleteFolderDialog.tsx` - confirm with move-to-root option
+- [x] Add edit/delete actions to FolderTab
+- [x] Add folder tab reordering (drag tabs)
 
 ### Phase 7: Polish
 - [ ] Loading states, empty states per folder

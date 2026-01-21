@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -6,7 +7,8 @@ import { useFolders } from '@/hooks/useFolders';
 import { DroppableFolderTab } from './DroppableFolderTab';
 import { DroppableAllTab } from './DroppableAllTab';
 import { FolderCreateInline } from './FolderCreateInline';
-import type { Id, FolderFilter } from '@/lib/convex';
+import { DeleteFolderDialog } from './DeleteFolderDialog';
+import type { Id, Folder, FolderFilter } from '@/lib/convex';
 
 interface FolderTabsProps {
   spaceId: Id<'spaces'>;
@@ -20,6 +22,7 @@ export function FolderTabs({
   onSelectFolder,
 }: FolderTabsProps) {
   const [isCreating, setIsCreating] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState<Folder | null>(null);
   const { folders, isLoading, createFolder, updateFolder, deleteFolder } =
     useFolders(spaceId);
 
@@ -28,14 +31,21 @@ export function FolderTabs({
     onSelectFolder(folderId);
   };
 
-  const handleDeleteFolder = async (folderId: Id<'folders'>) => {
-    // For now, just move todos to root and delete
-    // Phase 6 will add a confirmation dialog
-    await deleteFolder({ id: folderId, moveTodosToRoot: true });
+  const handleDeleteClick = (folder: Folder) => {
+    setFolderToDelete(folder);
+  };
+
+  const handleDeleteConfirm = async (moveTodosToRoot: boolean) => {
+    if (!folderToDelete) return;
+
+    await deleteFolder({ id: folderToDelete._id, moveTodosToRoot });
+
     // If the deleted folder was selected, switch to "all"
-    if (selectedFolderId === folderId) {
+    if (selectedFolderId === folderToDelete._id) {
       onSelectFolder('all');
     }
+
+    setFolderToDelete(null);
   };
 
   if (isLoading) {
@@ -56,17 +66,22 @@ export function FolderTabs({
         onSelect={() => onSelectFolder('all')}
       />
 
-      {/* Folder tabs (each droppable) */}
-      {folders?.map((folder) => (
-        <DroppableFolderTab
-          key={folder._id}
-          folder={folder}
-          isSelected={selectedFolderId === folder._id}
-          onSelect={() => onSelectFolder(folder._id)}
-          onUpdate={(updates) => updateFolder({ id: folder._id, ...updates })}
-          onDelete={() => handleDeleteFolder(folder._id)}
-        />
-      ))}
+      {/* Folder tabs (sortable + droppable) */}
+      <SortableContext
+        items={folders?.map((f) => `folder-${f._id}`) ?? []}
+        strategy={horizontalListSortingStrategy}
+      >
+        {folders?.map((folder) => (
+          <DroppableFolderTab
+            key={folder._id}
+            folder={folder}
+            isSelected={selectedFolderId === folder._id}
+            onSelect={() => onSelectFolder(folder._id)}
+            onUpdate={(updates) => updateFolder({ id: folder._id, ...updates })}
+            onDelete={() => handleDeleteClick(folder)}
+          />
+        ))}
+      </SortableContext>
 
       {/* Create inline or add button */}
       {isCreating ? (
@@ -87,6 +102,14 @@ export function FolderTabs({
           Add Folder
         </Button>
       )}
+
+      {/* Delete confirmation dialog */}
+      <DeleteFolderDialog
+        folderName={folderToDelete?.name ?? ''}
+        open={!!folderToDelete}
+        onOpenChange={(open) => !open && setFolderToDelete(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }
