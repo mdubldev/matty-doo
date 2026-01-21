@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "@/lib/convex";
 
 export function useSpaces() {
   const spaces = useQuery(api.spaces.list);

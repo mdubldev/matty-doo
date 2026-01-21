@@ -28,3 +28,9 @@ export function getRandomColor(): string {
 
 // Default emoji for new spaces
 export const DEFAULT_SPACE_ICON = '📋';
+
+// Get a random emoji from the default list
+export function getRandomEmoji(): string {
+  const index = Math.floor(Math.random() * DEFAULT_EMOJIS.length);
+  return DEFAULT_EMOJIS[index];
+}

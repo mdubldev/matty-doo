@@ -1,7 +1,22 @@
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { useSpaces } from '@/hooks/useSpaces';
+import { SpaceList } from '@/components/spaces/SpaceList';
+import type { Id } from '@/lib/convex';
 
-export function Sidebar() {
+interface SidebarProps {
+  selectedSpaceId: Id<'spaces'> | null;
+  onSelectSpace: (id: Id<'spaces'>) => void;
+}
+
+export function Sidebar({ selectedSpaceId, onSelectSpace }: SidebarProps) {
+  const {
+    spaces,
+    isLoading,
+    createSpace,
+    updateSpace,
+    deleteSpace,
+    reorderSpaces,
+  } = useSpaces();
+
   return (
     <aside className="w-64 border-r border-border p-4 flex flex-col shrink-0">
       <div className="flex items-center justify-between mb-4">
@@ -9,15 +24,22 @@ export function Sidebar() {
       </div>
 
       <div className="flex-1 overflow-auto">
-        <p className="text-sm text-muted-foreground py-8 text-center">
-          No spaces yet
-        </p>
+        {isLoading ? (
+          <div className="py-8 text-center">
+            <div className="text-sm text-muted-foreground">Loading...</div>
+          </div>
+        ) : (
+          <SpaceList
+            spaces={spaces ?? []}
+            selectedSpaceId={selectedSpaceId}
+            onSelectSpace={onSelectSpace}
+            onCreateSpace={createSpace}
+            onUpdateSpace={updateSpace}
+            onDeleteSpace={deleteSpace}
+            onReorderSpaces={reorderSpaces}
+          />
+        )}
       </div>
-
-      <Button variant="outline" className="w-full gap-2" disabled>
-        <Plus className="h-4 w-4" />
-        Add Space
-      </Button>
     </aside>
-  )
+  );
 }

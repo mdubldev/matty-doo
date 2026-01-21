@@ -347,24 +347,24 @@ export default defineSchema({
 ## Development Phases
 
 ### Phase 1: Setup (Day 1)
-- [ ] Initialize React app (Vite)
-- [ ] Configure Tailwind + shadcn/ui
-- [ ] Set up Convex project
-- [ ] Configure Convex Auth
-- [ ] Deploy to Vercel (empty shell)
+- [x] Initialize React app (Vite)
+- [x] Configure Tailwind + shadcn/ui
+- [x] Set up Convex project
+- [x] Configure Convex Auth
+- [x] Deploy to Vercel (empty shell)
 
 ### Phase 2: Auth + Landing (Day 1-2)
-- [ ] Build landing page
-- [ ] Implement signup/login forms
-- [ ] Set up protected routes
-- [ ] Basic app layout shell
+- [x] Build landing page
+- [x] Implement signup/login forms
+- [x] Set up protected routes
+- [x] Basic app layout shell
 
 ### Phase 3: Spaces (Day 2-3)
-- [ ] Convex schema + functions for spaces
-- [ ] Space list UI
-- [ ] Create/edit space modal (with color + icon picker)
-- [ ] Delete space with confirmation
-- [ ] Drag-and-drop reordering
+- [x] Convex schema + functions for spaces
+- [x] Space list UI
+- [x] Create/edit space (inline with color + icon picker)
+- [x] Delete space with confirmation
+- [x] Drag-and-drop reordering
 
 ### Phase 4: To-Dos (Day 3-4)
 - [ ] Convex schema + functions for to-dos

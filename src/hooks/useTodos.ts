@@ -1,6 +1,5 @@
 import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import type { Id } from "../../convex/_generated/dataModel";
+import { api, type Id } from "@/lib/convex";
 
 export function useTodos(spaceId: Id<"spaces"> | undefined) {
   const todos = useQuery(api.todos.list, spaceId ? { spaceId } : "skip");
