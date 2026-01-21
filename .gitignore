@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.vercel
 
 # Convex (prevent IDE-generated JS files)
 convex/*.js
