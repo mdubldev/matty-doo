@@ -15,17 +15,20 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useTodos } from '@/hooks/useTodos';
 import { TodoQuickAdd } from './TodoQuickAdd';
 import { TodoItem } from './TodoItem';
 import { TodoDetailModal } from './TodoDetailModal';
-import type { Id, Todo } from '@/lib/convex';
+import { TodoListSkeleton } from './TodoSkeleton';
+import type { Id, Todo, Space } from '@/lib/convex';
 
 interface TodoListProps {
   spaceId: Id<'spaces'>;
+  space: Space;
 }
 
-export function TodoList({ spaceId }: TodoListProps) {
+export function TodoList({ spaceId, space }: TodoListProps) {
   const {
     todos,
     isLoading,
@@ -108,14 +111,36 @@ export function TodoList({ spaceId }: TodoListProps) {
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-muted-foreground">Loading todos...</p>
+      <div className="h-full flex flex-col">
+        {/* Space header skeleton */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+          <Skeleton className="w-3 h-3 rounded-full shrink-0" />
+          <Skeleton className="w-6 h-6 rounded shrink-0" />
+          <Skeleton className="h-5 w-32" />
+        </div>
+        {/* Quick add skeleton */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+          <Skeleton className="h-5 w-5 rounded shrink-0" />
+          <Skeleton className="h-5 flex-1" />
+        </div>
+        {/* Todo list skeleton */}
+        <TodoListSkeleton count={5} />
       </div>
     );
   }
 
   return (
     <div className="h-full flex flex-col">
+      {/* Space header */}
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+        <div
+          className="w-3 h-3 rounded-full shrink-0"
+          style={{ backgroundColor: space.color }}
+        />
+        <span className="text-lg">{space.icon}</span>
+        <h1 className="text-lg font-semibold truncate">{space.name}</h1>
+      </div>
+
       {/* Quick add input */}
       <TodoQuickAdd spaceId={spaceId} onCreateTodo={createTodo} />
 
@@ -123,9 +148,15 @@ export function TodoList({ spaceId }: TodoListProps) {
       <div className="flex-1 overflow-auto">
         {/* Empty state */}
         {pendingTodos.length === 0 && completedTodos.length === 0 && (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No todos yet. Add one above!
-          </p>
+          <div className="py-16 px-4 text-center">
+            <div className="text-4xl mb-4">✨</div>
+            <p className="text-sm font-medium text-foreground mb-1">
+              All clear!
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Add your first todo using the input above
+            </p>
+          </div>
         )}
 
         {/* Pending todos with drag-drop */}

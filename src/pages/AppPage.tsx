@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useConvexAuth } from 'convex/react';
 import { Navigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { TodoList } from '@/components/todos';
+import { useSpaces } from '@/hooks/useSpaces';
 import type { Id } from '@/lib/convex';
 
 export function AppPage() {
@@ -10,6 +11,13 @@ export function AppPage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<Id<'spaces'> | null>(
     null
   );
+  const { spaces } = useSpaces();
+
+  // Find the selected space object
+  const selectedSpace = useMemo(() => {
+    if (!selectedSpaceId || !spaces) return null;
+    return spaces.find((s) => s._id === selectedSpaceId) ?? null;
+  }, [selectedSpaceId, spaces]);
 
   if (isLoading) {
     return (
@@ -28,12 +36,16 @@ export function AppPage() {
       selectedSpaceId={selectedSpaceId}
       onSelectSpace={setSelectedSpaceId}
     >
-      {selectedSpaceId ? (
-        <TodoList spaceId={selectedSpaceId} />
+      {selectedSpace ? (
+        <TodoList spaceId={selectedSpaceId!} space={selectedSpace} />
       ) : (
-        <div className="h-full flex items-center justify-center">
-          <p className="text-muted-foreground">
-            Select or create a space to get started
+        <div className="h-full flex flex-col items-center justify-center px-4">
+          <div className="text-5xl mb-4">👈</div>
+          <p className="text-lg font-medium text-foreground mb-2">
+            Select a space
+          </p>
+          <p className="text-sm text-muted-foreground text-center max-w-xs">
+            Choose a space from the sidebar to view and manage your todos
           </p>
         </div>
       )}

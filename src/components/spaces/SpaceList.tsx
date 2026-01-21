@@ -95,9 +95,15 @@ export function SpaceList({
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto space-y-1">
         {spaces.length === 0 && !isCreating && (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No spaces yet
-          </p>
+          <div className="py-12 px-4 text-center">
+            <div className="text-3xl mb-3">📋</div>
+            <p className="text-sm font-medium text-foreground mb-1">
+              No spaces yet
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Create your first space to start organizing tasks
+            </p>
+          </div>
         )}
 
         <DndContext
