@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { getRandomColor, getRandomEmoji } from '@/lib/constants';
+import { SPACE_COLORS } from '@/lib/constants';
+import { ColorPicker } from './ColorPicker';
 import type { Id } from '@/lib/convex';
 
 interface SpaceCreateInlineProps {
@@ -15,10 +16,11 @@ export function SpaceCreateInline({
   onCreateSpace,
 }: SpaceCreateInlineProps) {
   const [name, setName] = useState('');
-  const [color] = useState(() => getRandomColor());
-  const [icon] = useState(() => getRandomEmoji());
+  const [color, setColor] = useState<string>(SPACE_COLORS[0].value);
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -33,7 +35,7 @@ export function SpaceCreateInline({
       const newSpaceId = await onCreateSpace({
         name: trimmedName,
         color,
-        icon,
+        icon: '',
       });
       onCreated(newSpaceId);
     } catch (error) {
@@ -51,19 +53,35 @@ export function SpaceCreateInline({
     }
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: React.FocusEvent) => {
+    // Don't cancel if focus is moving within the component (e.g., to color picker)
+    if (containerRef.current?.contains(e.relatedTarget as Node)) {
+      return;
+    }
+    // Don't cancel if color picker is open
+    if (colorPickerOpen) {
+      return;
+    }
     if (!name.trim()) {
       onCancel();
     }
   };
 
   return (
-    <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-accent">
-      <div
-        className="w-3 h-3 rounded-full shrink-0"
-        style={{ backgroundColor: color }}
-      />
-      <span className="text-base shrink-0">{icon}</span>
+    <div ref={containerRef} className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-accent">
+      <ColorPicker
+        currentColor={color}
+        onSelect={setColor}
+        open={colorPickerOpen}
+        onOpenChange={setColorPickerOpen}
+      >
+        <button
+          type="button"
+          className="w-4 h-4 rounded-full shrink-0 hover:ring-2 hover:ring-offset-1 hover:ring-primary/50 transition-all"
+          style={{ backgroundColor: color }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </ColorPicker>
       <Input
         ref={inputRef}
         value={name}

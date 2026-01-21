@@ -13,24 +13,3 @@ export const SPACE_COLORS = [
   { name: 'Purple', value: '#a855f7' },
   { name: 'Pink', value: '#ec4899' },
 ] as const;
-
-// Default emojis for quick selection
-export const DEFAULT_EMOJIS = [
-  '📋', '📝', '✅', '🎯', '💼', '🏠', '🛒', '💡',
-  '📚', '🎨', '🏃', '🍳', '✈️', '💰', '🎵', '🌱',
-] as const;
-
-// Get a random color from the palette
-export function getRandomColor(): string {
-  const index = Math.floor(Math.random() * SPACE_COLORS.length);
-  return SPACE_COLORS[index].value;
-}
-
-// Default emoji for new spaces
-export const DEFAULT_SPACE_ICON = '📋';
-
-// Get a random emoji from the default list
-export function getRandomEmoji(): string {
-  const index = Math.floor(Math.random() * DEFAULT_EMOJIS.length);
-  return DEFAULT_EMOJIS[index];
-}

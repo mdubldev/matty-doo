@@ -3,7 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
-import { Trash2, Save } from 'lucide-react';
+import { Trash2, Save, Check } from 'lucide-react';
 import { TiptapToolbar } from './TiptapToolbar';
 import {
   Dialog,
@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import type { Todo, Id } from '@/lib/convex';
 
@@ -124,24 +123,24 @@ export function TodoDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        className="sm:max-w-lg"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+          // Focus the notes editor instead
+          setTimeout(() => editor?.commands.focus('end'), 0);
+        }}
+      >
         <DialogHeader>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={isCompleted}
-              onCheckedChange={handleToggleStatus}
-              className="shrink-0"
-            />
-            <Input
-              value={title}
-              onChange={handleTitleChange}
-              onBlur={handleTitleBlur}
-              className={cn(
-                'border-0 shadow-none focus-visible:ring-0 px-0 text-lg font-medium',
-                isCompleted && 'line-through text-muted-foreground'
-              )}
-            />
-          </div>
+          <Input
+            value={title}
+            onChange={handleTitleChange}
+            onBlur={handleTitleBlur}
+            className={cn(
+              'border-0 shadow-none focus-visible:ring-0 px-0 text-lg font-medium',
+              isCompleted && 'line-through text-muted-foreground'
+            )}
+          />
         </DialogHeader>
 
         <div className="rounded-md border border-input bg-transparent overflow-hidden">
@@ -161,10 +160,15 @@ export function TodoDetailModal({
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              {hasChanges ? 'Unsaved changes' : 'Saved'}
-            </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleToggleStatus}
+            >
+              <Check className="h-4 w-4 mr-2" />
+              {isCompleted ? 'Mark incomplete' : 'Mark complete'}
+            </Button>
             <Button
               size="sm"
               onClick={saveChanges}

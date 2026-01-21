@@ -1,6 +1,8 @@
+import { useRef } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, FileText } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -21,6 +23,7 @@ export function TodoItem({
 }: TodoItemProps) {
   const isCompleted = todo.status === 'complete';
   const hasNotes = !!todo.notes;
+  const checkboxRef = useRef<HTMLButtonElement>(null);
 
   const {
     attributes,
@@ -53,6 +56,24 @@ export function TodoItem({
   };
 
   const handleCheckboxChange = () => {
+    // Trigger confetti when marking as complete (not when unchecking)
+    if (!isCompleted && checkboxRef.current) {
+      const rect = checkboxRef.current.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+      confetti({
+        particleCount: 30,
+        spread: 40,
+        origin: { x, y },
+        colors: ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'],
+        ticks: 50,
+        gravity: 2,
+        scalar: 0.6,
+        startVelocity: 15,
+        disableForReducedMotion: true,
+      });
+    }
     onToggleStatus({ id: todo._id });
   };
 
@@ -86,15 +107,6 @@ export function TodoItem({
         <div className="w-5 -ml-1" /> // Spacer for alignment
       )}
 
-      {/* Checkbox */}
-      <Checkbox
-        data-slot="checkbox"
-        checked={isCompleted}
-        onCheckedChange={handleCheckboxChange}
-        onClick={(e) => e.stopPropagation()}
-        className="shrink-0"
-      />
-
       {/* Title */}
       <span
         className={cn(
@@ -110,18 +122,26 @@ export function TodoItem({
         <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
       )}
 
-      {/* Delete button - visible for completed todos */}
-      {isCompleted && (
-        <Button
-          data-action="delete"
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-destructive shrink-0"
-          onClick={handleDelete}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      )}
+      {/* Delete button */}
+      <Button
+        data-action="delete"
+        variant="ghost"
+        size="icon"
+        className="h-7 w-7 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive shrink-0 transition-opacity"
+        onClick={handleDelete}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+
+      {/* Checkbox */}
+      <Checkbox
+        ref={checkboxRef}
+        data-slot="checkbox"
+        checked={isCompleted}
+        onCheckedChange={handleCheckboxChange}
+        onClick={(e) => e.stopPropagation()}
+        className="shrink-0"
+      />
     </div>
   );
 }

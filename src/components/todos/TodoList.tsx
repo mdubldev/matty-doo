@@ -137,7 +137,7 @@ export function TodoList({ spaceId, space }: TodoListProps) {
           className="w-3 h-3 rounded-full shrink-0"
           style={{ backgroundColor: space.color }}
         />
-        <span className="text-lg">{space.icon}</span>
+        {space.icon && <span className="text-lg">{space.icon}</span>}
         <h1 className="text-lg font-semibold truncate">{space.name}</h1>
       </div>
 

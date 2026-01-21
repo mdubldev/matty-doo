@@ -19,7 +19,7 @@ export interface Space {
   userId: string;
   name: string;
   color: string;
-  icon: string;
+  icon?: string;
   order: number;
   createdAt: number;
 }

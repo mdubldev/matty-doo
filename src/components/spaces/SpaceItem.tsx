@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SpaceEditInline } from './SpaceEditInline';
 import { ColorPicker } from './ColorPicker';
-import { EmojiPicker } from './EmojiPicker';
 import { DeleteSpaceDialog } from './DeleteSpaceDialog';
 import type { Space } from '@/lib/convex';
 
@@ -38,7 +37,6 @@ export function SpaceItem({
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
   const {
     attributes,
@@ -69,11 +67,6 @@ export function SpaceItem({
   const handleColorSelect = async (color: string) => {
     await onUpdate({ color });
     setColorPickerOpen(false);
-  };
-
-  const handleEmojiSelect = async (emoji: string) => {
-    await onUpdate({ icon: emoji });
-    setEmojiPickerOpen(false);
   };
 
   const handleDeleteConfirm = async () => {
@@ -120,23 +113,8 @@ export function SpaceItem({
           />
         </ColorPicker>
 
-        {/* Emoji */}
-        <EmojiPicker
-          currentEmoji={space.icon}
-          onSelect={handleEmojiSelect}
-          open={emojiPickerOpen}
-          onOpenChange={setEmojiPickerOpen}
-        >
-          <button
-            className="text-base shrink-0 hover:scale-110 transition-transform"
-            onClick={(e) => {
-              e.stopPropagation();
-              setEmojiPickerOpen(true);
-            }}
-          >
-            {space.icon}
-          </button>
-        </EmojiPicker>
+        {/* Emoji (display only for existing spaces) */}
+        {space.icon && <span className="text-base shrink-0">{space.icon}</span>}
 
         {/* Name */}
         {isEditing ? (
