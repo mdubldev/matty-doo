@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   DndContext,
+  DragOverlay,
   closestCenter,
   pointerWithin,
   KeyboardSensor,
@@ -8,8 +9,10 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragStartEvent,
   type CollisionDetection,
 } from '@dnd-kit/core';
+import { GripVertical } from 'lucide-react';
 import {
   arrayMove,
   SortableContext,
@@ -67,6 +70,7 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -83,7 +87,13 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
   const pendingTodos = (todos ?? []).filter((t) => t.status === 'pending');
   const completedTodos = (todos ?? []).filter((t) => t.status === 'complete');
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const draggedTodo = todos?.find((t) => t._id === event.active.id);
+    setActiveTodo(draggedTodo ?? null);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveTodo(null);
     const { active, over } = event;
     if (!over) return;
 
@@ -217,6 +227,7 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
       <DndContext
         sensors={sensors}
         collisionDetection={customCollisionDetection}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
         {/* Folder tabs (droppable targets) */}
@@ -303,6 +314,16 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
             ))}
           </SortableContext>
         </div>
+
+        {/* Drag overlay - renders dragged item above all content */}
+        <DragOverlay dropAnimation={null}>
+          {activeTodo && (
+            <div className="flex items-center gap-3 px-4 py-3 rounded-md bg-background border shadow-lg">
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm truncate">{activeTodo.title}</span>
+            </div>
+          )}
+        </DragOverlay>
       </DndContext>
 
       {/* Detail modal */}

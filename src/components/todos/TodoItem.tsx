@@ -44,11 +44,10 @@ export function TodoItem({
   };
 
   const handleClick = (e: React.MouseEvent) => {
-    // Don't open modal if clicking checkbox, drag handle, or delete button
+    // Don't open modal if clicking checkbox or delete button
     const target = e.target as HTMLElement;
     if (
       target.closest('[data-slot="checkbox"]') ||
-      target.closest('[data-action="drag"]') ||
       target.closest('[data-action="delete"]')
     ) {
       return;
@@ -88,21 +87,18 @@ export function TodoItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'group flex items-center gap-3 px-4 py-3 rounded-md cursor-pointer transition-colors',
-        'hover:bg-accent/50',
-        isDragging && 'opacity-50 shadow-lg bg-accent'
+        'group flex items-center gap-3 px-4 py-3 rounded-md cursor-grab transition-colors',
+        'hover:bg-accent/50 active:cursor-grabbing',
+        isDragging && 'opacity-50 shadow-lg bg-accent cursor-grabbing'
       )}
       onClick={handleClick}
+      {...attributes}
+      {...listeners}
     >
-      {/* Drag handle - all todos can be dragged to folders */}
-      <button
-        data-action="drag"
-        className="p-0.5 -ml-1 rounded opacity-0 group-hover:opacity-100 hover:bg-muted cursor-grab active:cursor-grabbing transition-opacity"
-        {...attributes}
-        {...listeners}
-      >
+      {/* Drag indicator - visual hint that item is draggable */}
+      <div className="p-0.5 -ml-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <GripVertical className="h-4 w-4 text-muted-foreground" />
-      </button>
+      </div>
 
       {/* Title */}
       <span
