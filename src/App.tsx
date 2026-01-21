@@ -1,14 +1,15 @@
+import { Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
+import { LandingPage } from '@/pages/LandingPage'
+import { AppPage } from '@/pages/AppPage'
 
 function App() {
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Matty Doo</h1>
-          <p className="text-muted-foreground">A super lightweight to-dos app</p>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/app" element={<AppPage />} />
+      </Routes>
       <Toaster />
     </>
   )
