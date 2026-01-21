@@ -242,12 +242,25 @@ export function TodoList({ spaceId, space, selectedFolderId, onSelectFolder }: T
           {pendingTodos.length === 0 && completedTodos.length === 0 && (
             <div className="py-16 px-4 text-center">
               <div className="text-4xl mb-4">✨</div>
-              <p className="text-sm font-medium text-foreground mb-1">
-                All clear!
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Add your first todo using the input above
-              </p>
+              {selectedFolderId === 'all' ? (
+                <>
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    All clear!
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Add your first todo using the input above
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    No todos in {folders?.find((f) => f._id === selectedFolderId)?.name ?? 'this folder'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Add a todo or drag one here
+                  </p>
+                </>
+              )}
             </div>
           )}
 

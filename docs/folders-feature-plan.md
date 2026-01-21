@@ -149,9 +149,9 @@ todos: defineTable({
 - [x] Add folder tab reordering (drag tabs)
 
 ### Phase 7: Polish
-- [ ] Loading states, empty states per folder
-- [ ] Mobile responsiveness (horizontal scroll for tabs)
-- [ ] Keyboard navigation for tabs
+- [x] Loading states, empty states per folder
+- [x] Mobile responsiveness (horizontal scroll for tabs)
+- [x] Keyboard navigation for tabs
 
 ---
 

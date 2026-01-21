@@ -247,3 +247,13 @@ body {
   margin: 0.5em 0;
   color: var(--muted-foreground);
 }
+
+/* Hide scrollbar for horizontal overflow containers */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
