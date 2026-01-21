@@ -3,7 +3,8 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Save } from 'lucide-react';
+import { TiptapToolbar } from './TiptapToolbar';
 import {
   Dialog,
   DialogContent,
@@ -143,8 +144,11 @@ export function TodoDetailModal({
           </div>
         </DialogHeader>
 
-        <div className="min-h-[150px] rounded-md border border-input bg-transparent px-3 py-2">
-          <EditorContent editor={editor} className="tiptap" />
+        <div className="rounded-md border border-input bg-transparent overflow-hidden">
+          <div className="min-h-[150px] px-3 py-2">
+            <EditorContent editor={editor} className="tiptap" />
+          </div>
+          <TiptapToolbar editor={editor} />
         </div>
 
         <DialogFooter className="sm:justify-between">
@@ -157,8 +161,18 @@ export function TodoDetailModal({
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
-          <div className="text-xs text-muted-foreground">
-            {hasChanges ? 'Unsaved changes' : 'All changes saved'}
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              {hasChanges ? 'Unsaved changes' : 'Saved'}
+            </span>
+            <Button
+              size="sm"
+              onClick={saveChanges}
+              disabled={!hasChanges}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>
