@@ -4,7 +4,7 @@
 import type { GenericId } from "convex/values";
 
 // Table names in our schema
-export type TableNames = "spaces" | "todos";
+export type TableNames = "spaces" | "folders" | "todos";
 
 // Type-safe document ID
 export type Id<T extends TableNames> = GenericId<T>;
@@ -24,10 +24,26 @@ export interface Space {
   createdAt: number;
 }
 
+export interface Folder {
+  _id: Id<"folders">;
+  _creationTime: number;
+  spaceId: Id<"spaces">;
+  userId: string;
+  name: string;
+  color: string;
+  icon?: string;
+  order: number;
+  createdAt: number;
+}
+
+// Filter type for querying todos by folder
+export type FolderFilter = "all" | "root" | Id<"folders">;
+
 export interface Todo {
   _id: Id<"todos">;
   _creationTime: number;
   spaceId: Id<"spaces">;
+  folderId?: Id<"folders">;
   userId: string;
   title: string;
   notes?: string;

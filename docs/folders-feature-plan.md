@@ -124,9 +124,9 @@ todos: defineTable({
 - [x] Update `convex/spaces.ts` - cascade delete folders
 
 ### Phase 2: Type Definitions & Hooks
-- [ ] Update `src/lib/convex.ts` with Folder type, FolderFilter type
-- [ ] Create `src/hooks/useFolders.ts`
-- [ ] Update `src/hooks/useTodos.ts` - add folder filter, move mutation
+- [x] Update `src/lib/convex.ts` with Folder type, FolderFilter type
+- [x] Create `src/hooks/useFolders.ts`
+- [x] Update `src/hooks/useTodos.ts` - add folder filter, move mutation
 
 ### Phase 3: Basic Folder Components
 - [ ] Create `FolderTab.tsx` - individual tab display

@@ -1,16 +1,27 @@
 import { useQuery, useMutation } from "convex/react";
 import { toast } from "sonner";
-import { api, type Id } from "@/lib/convex";
+import { api, type Id, type FolderFilter } from "@/lib/convex";
 
-export function useTodos(spaceId: Id<"spaces"> | undefined) {
-  const todos = useQuery(api.todos.list, spaceId ? { spaceId } : "skip");
+export function useTodos(
+  spaceId: Id<"spaces"> | undefined,
+  folderFilter?: FolderFilter
+) {
+  const todos = useQuery(
+    api.todos.list,
+    spaceId ? { spaceId, folderFilter } : "skip"
+  );
   const createTodoMutation = useMutation(api.todos.create);
   const updateTodoMutation = useMutation(api.todos.update);
   const deleteTodoMutation = useMutation(api.todos.remove);
   const reorderTodosMutation = useMutation(api.todos.reorder);
   const toggleTodoStatusMutation = useMutation(api.todos.toggleStatus);
+  const moveToFolderMutation = useMutation(api.todos.moveToFolder);
 
-  const createTodo = async (args: { spaceId: Id<"spaces">; title: string }) => {
+  const createTodo = async (args: {
+    spaceId: Id<"spaces">;
+    folderId?: Id<"folders">;
+    title: string;
+  }) => {
     try {
       return await createTodoMutation(args);
     } catch (error) {
@@ -55,6 +66,15 @@ export function useTodos(spaceId: Id<"spaces"> | undefined) {
     }
   };
 
+  const moveTodoToFolder = async (args: { id: Id<"todos">; folderId?: Id<"folders"> }) => {
+    try {
+      return await moveToFolderMutation(args);
+    } catch (error) {
+      toast.error("Failed to move todo");
+      throw error;
+    }
+  };
+
   return {
     todos,
     isLoading: todos === undefined,
@@ -63,5 +83,6 @@ export function useTodos(spaceId: Id<"spaces"> | undefined) {
     deleteTodo,
     reorderTodos,
     toggleTodoStatus,
+    moveTodoToFolder,
   };
 }
