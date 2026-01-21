@@ -139,9 +139,9 @@ todos: defineTable({
 - [x] Update `TodoQuickAdd.tsx` - pass folderId to create (+ folder selector dropdown in "All" view)
 
 ### Phase 5: Cross-Folder Drag-Drop
-- [ ] Make FolderTab a droppable target
-- [ ] Update TodoList DndContext to detect folder-tab drops
-- [ ] Call moveTodoToFolder on cross-folder drop
+- [x] Make FolderTab a droppable target
+- [x] Update TodoList DndContext to detect folder-tab drops
+- [x] Call moveTodoToFolder on cross-folder drop
 
 ### Phase 6: Folder Management
 - [ ] Create `DeleteFolderDialog.tsx` - confirm with move-to-root option

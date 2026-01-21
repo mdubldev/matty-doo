@@ -34,7 +34,8 @@ export function TodoItem({
     isDragging,
   } = useSortable({
     id: todo._id,
-    disabled: isCompleted,
+    // All todos are draggable (for cross-folder movement)
+    // Reordering is controlled in onDragEnd handler
   });
 
   const style = {
@@ -93,19 +94,15 @@ export function TodoItem({
       )}
       onClick={handleClick}
     >
-      {/* Drag handle - only for pending todos */}
-      {!isCompleted ? (
-        <button
-          data-action="drag"
-          className="p-0.5 -ml-1 rounded opacity-0 group-hover:opacity-100 hover:bg-muted cursor-grab active:cursor-grabbing transition-opacity"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
-        </button>
-      ) : (
-        <div className="w-5 -ml-1" /> // Spacer for alignment
-      )}
+      {/* Drag handle - all todos can be dragged to folders */}
+      <button
+        data-action="drag"
+        className="p-0.5 -ml-1 rounded opacity-0 group-hover:opacity-100 hover:bg-muted cursor-grab active:cursor-grabbing transition-opacity"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4 text-muted-foreground" />
+      </button>
 
       {/* Title */}
       <span

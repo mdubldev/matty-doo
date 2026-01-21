@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFolders } from '@/hooks/useFolders';
-import { FolderTab } from './FolderTab';
+import { DroppableFolderTab } from './DroppableFolderTab';
+import { DroppableAllTab } from './DroppableAllTab';
 import { FolderCreateInline } from './FolderCreateInline';
 import type { Id, FolderFilter } from '@/lib/convex';
 
@@ -50,20 +50,15 @@ export function FolderTabs({
 
   return (
     <div className="flex items-center gap-1 overflow-x-auto pb-2 border-b">
-      {/* "All" tab - always first */}
-      <div
-        className={cn(
-          'flex items-center gap-2 px-3 py-1.5 rounded-md cursor-pointer transition-colors shrink-0 text-sm',
-          selectedFolderId === 'all' ? 'bg-accent' : 'hover:bg-accent/50'
-        )}
-        onClick={() => onSelectFolder('all')}
-      >
-        All
-      </div>
+      {/* "All" tab - always first (droppable to move to root) */}
+      <DroppableAllTab
+        isSelected={selectedFolderId === 'all'}
+        onSelect={() => onSelectFolder('all')}
+      />
 
-      {/* Folder tabs */}
+      {/* Folder tabs (each droppable) */}
       {folders?.map((folder) => (
-        <FolderTab
+        <DroppableFolderTab
           key={folder._id}
           folder={folder}
           isSelected={selectedFolderId === folder._id}
