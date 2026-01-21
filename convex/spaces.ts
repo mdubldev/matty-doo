@@ -91,7 +91,7 @@ export const update = mutation({
 });
 
 /**
- * Delete a space and ALL its to-dos (cascade delete).
+ * Delete a space and ALL its folders and todos (cascade delete).
  */
 export const remove = mutation({
   args: {
@@ -116,6 +116,16 @@ export const remove = mutation({
 
     for (const todo of todos) {
       await ctx.db.delete(todo._id);
+    }
+
+    // Delete all folders in this space (cascade delete)
+    const folders = await ctx.db
+      .query("folders")
+      .withIndex("by_space", (q) => q.eq("spaceId", args.id))
+      .collect();
+
+    for (const folder of folders) {
+      await ctx.db.delete(folder._id);
     }
 
     await ctx.db.delete(args.id);

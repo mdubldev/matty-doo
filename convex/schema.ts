@@ -14,8 +14,21 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_user", ["userId"]),
 
+  folders: defineTable({
+    spaceId: v.id("spaces"),
+    userId: v.string(),
+    name: v.string(),
+    color: v.string(),
+    icon: v.optional(v.string()),
+    order: v.number(),
+    createdAt: v.number(),
+  })
+    .index("by_space", ["spaceId"])
+    .index("by_user", ["userId"]),
+
   todos: defineTable({
     spaceId: v.id("spaces"),
+    folderId: v.optional(v.id("folders")),
     userId: v.string(),
     title: v.string(),
     notes: v.optional(v.string()),
@@ -25,5 +38,6 @@ export default defineSchema({
     completedAt: v.optional(v.number()),
   })
     .index("by_space", ["spaceId"])
+    .index("by_folder", ["folderId"])
     .index("by_user", ["userId"]),
 });
