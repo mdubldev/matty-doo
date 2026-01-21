@@ -4,6 +4,8 @@
 
 **Matty Doo** is a minimal, responsive personal to-do app. It prioritizes simplicity and speed over feature bloat—just spaces, to-dos, and the ability to add notes when needed.
 
+Every time you complete a phase/task in the prd's build plan you should mark it as complete.
+
 **Target user:** Single user (personal use)
 
 **Design principles:**

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Convex (prevent IDE-generated JS files)
+convex/*.js
+!convex/_generated
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
