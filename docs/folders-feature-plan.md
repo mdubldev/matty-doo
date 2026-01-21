@@ -129,9 +129,9 @@ todos: defineTable({
 - [x] Update `src/hooks/useTodos.ts` - add folder filter, move mutation
 
 ### Phase 3: Basic Folder Components
-- [ ] Create `FolderTab.tsx` - individual tab display
-- [ ] Create `FolderTabs.tsx` - tab bar container
-- [ ] Create `FolderCreateInline.tsx` - inline creation
+- [x] Create `FolderTab.tsx` - individual tab display
+- [x] Create `FolderTabs.tsx` - tab bar container
+- [x] Create `FolderCreateInline.tsx` - inline creation
 
 ### Phase 4: Integration
 - [ ] Update `AppPage.tsx` - add selectedFolderId state
